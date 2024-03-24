@@ -1,3 +1,5 @@
+import type { Equal, Expect } from "@type-challenges/utils";
+
 // Implement the built-in Pick<T, K> generic without using it.
 // Constructs a type by picking the set of properties K from T
 // https://github.com/type-challenges/type-challenges/blob/main/questions/00004-easy-pick/README.md
@@ -12,15 +14,25 @@ type MyPick<T, Keys extends keyof T> = {
 // ======================================================
 // Test
 // ======================================================
-type Person = {
-  first: string;
-  last: string;
-  age: number;
-};
 
-type PersonName = MyPick<Person, "first" | "last">;
+type cases = [
+  Expect<Equal<Expected1, MyPick<Todo, "title">>>,
+  Expect<Equal<Expected2, MyPick<Todo, "title" | "completed">>>,
+  // @ts-expect-error
+  MyPick<Todo, "title" | "completed" | "invalid">
+];
 
-const myName: PersonName = {
-  first: "Wes",
-  last: "Sankey",
-};
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+interface Expected1 {
+  title: string;
+}
+
+interface Expected2 {
+  title: string;
+  completed: boolean;
+}
